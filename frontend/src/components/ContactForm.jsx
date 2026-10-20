@@ -544,7 +544,7 @@ const ContactForm = () => {
                         </svg>
                     </div>
                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>Visit Us</div>
-                    <div style={{ fontSize: '12px', color: '#64748b' }}>JewelNest, Banipur, Murshidabad</div>
+                    <div style={{ fontSize: '12px', color: '#64748b' }}>FoodNest, Banipur, Murshidabad</div>
                 </div>
 
                 <div>
@@ -583,7 +583,7 @@ const ContactForm = () => {
                         </svg>
                     </div>
                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>Email Us</div>
-                    <div style={{ fontSize: '12px', color: '#64748b' }}>jewelnest86@gmail.com</div>
+                    <div style={{ fontSize: '12px', color: '#64748b' }}>support@foodnest.com</div>
                 </div>
             </div>
 

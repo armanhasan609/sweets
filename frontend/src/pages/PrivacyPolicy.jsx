@@ -559,7 +559,7 @@ const PrivacyPolicy = () => {
                             flexWrap: "wrap",
                         }}>
                             <a
-                                href="mailto:jewelnest86@gmail.com"
+                                href="mailto:support@foodnest.com"
                                 style={{
                                     background: "white",
                                     color: "#667eea",
@@ -583,7 +583,7 @@ const PrivacyPolicy = () => {
                                     e.currentTarget.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.1)";
                                 }}
                             >
-                                📧 jewelnest86@gmail.com
+                                📧 support@foodnest.com
                             </a>
                             <span style={{
                                 color: "white",

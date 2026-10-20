@@ -227,7 +227,7 @@ const ProductItem = ({
                 {/* Product Image */}
                 <img
                     src={imageSrc || fallbackImage}
-                    alt={name || 'Jewelry Product'}
+                    alt={name || 'FoodNest food product'}
                     onLoad={handleImageLoad}
                     onError={handleImageError}
                     loading="lazy"

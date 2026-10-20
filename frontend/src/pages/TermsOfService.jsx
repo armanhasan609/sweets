@@ -205,7 +205,7 @@ const TermsOfService = () => {
                             1. Introduction
                         </h3>
                         <p className="terms-text" style={textStyle}>
-                            Welcome to <strong style={{ color: "#667eea" }}>JewelNest</strong>. By accessing our website, you agree to be bound by these Terms of Service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
+                            Welcome to <strong style={{ color: "#667eea" }}>FoodNest</strong>. By accessing our website, you agree to be bound by these Terms of Service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
                         </p>
                     </section>
 
@@ -233,7 +233,7 @@ const TermsOfService = () => {
                             2. Use License
                         </h3>
                         <p className="terms-text" style={textStyle}>
-                            Permission is granted to temporarily download one copy of the materials (information or software) on JewelNest's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                            Permission is granted to temporarily download one copy of the materials (information or software) on FoodNest's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
                         </p>
                         <ul style={{
                             ...textStyle,
@@ -273,7 +273,7 @@ const TermsOfService = () => {
                             3. Disclaimer
                         </h3>
                         <p className="terms-text" style={textStyle}>
-                            The materials on JewelNest's website are provided on an <strong style={{ color: "#667eea" }}>'as is'</strong> basis. JewelNest makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+                            The materials on FoodNest's website are provided on an <strong style={{ color: "#667eea" }}>'as is'</strong> basis. FoodNest makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
                         </p>
                     </section>
 
@@ -301,7 +301,7 @@ const TermsOfService = () => {
                             4. Limitations
                         </h3>
                         <p className="terms-text" style={textStyle}>
-                            In no event shall JewelNest or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on JewelNest's website, even if JewelNest or a JewelNest authorized representative has been notified orally or in writing of the possibility of such damage.
+                            In no event shall FoodNest or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on JewelNest's website, even if JewelNest or a JewelNest authorized representative has been notified orally or in writing of the possibility of such damage.
                         </p>
                     </section>
 
@@ -329,7 +329,7 @@ const TermsOfService = () => {
                             5. Revisions and Errata
                         </h3>
                         <p className="terms-text" style={textStyle}>
-                            The materials appearing on JewelNest's website could include technical, typographical, or photographic errors. JewelNest does not warrant that any of the materials on its website are accurate, complete, or current. JewelNest may make changes to the materials contained on its website at any time without notice.
+                            The materials appearing on FoodNest's website could include technical, typographical, or photographic errors. JewelNest does not warrant that any of the materials on its website are accurate, complete, or current. JewelNest may make changes to the materials contained on its website at any time without notice.
                         </p>
                     </section>
 
@@ -357,7 +357,7 @@ const TermsOfService = () => {
                             6. Links
                         </h3>
                         <p className="terms-text" style={textStyle}>
-                            JewelNest has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by JewelNest of the site. Use of any such linked website is at the user's own risk.
+                            FoodNest has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by JewelNest of the site. Use of any such linked website is at the user's own risk.
                         </p>
                     </section>
 

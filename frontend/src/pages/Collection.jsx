@@ -1,21 +1,25 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import ProductItem from '../components/ProductItem.jsx';
 import { Filter, Sparkles, Sliders, Search, X, ChevronDown, Gem, Star, Award, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Collection = () => {
-    const { products, search, showSearch, setSearch, setShowSearch, subCategories } = useContext(ShopContext);
+    const { products, search, showSearch, setSearch, setShowSearch, subCategories, refreshSubCategories, loading } = useContext(ShopContext);
 
-    const [filterProducts, setFilterProducts] = useState([]);
-    const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
     const [sortType, setSortType] = useState('relevant');
-    const [isLoading, setIsLoading] = useState(true);
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
     const [mobileSearchQuery, setMobileSearchQuery] = useState('');
     const [showCategoryStrip, setShowCategoryStrip] = useState(true);
     const collectionRef = useRef(null);
+
+    // Auto-fetch subcategories if not yet loaded in context
+    useEffect(() => {
+        if ((!subCategories || subCategories.length === 0) && refreshSubCategories) {
+            refreshSubCategories().catch(() => { });
+        }
+    }, [subCategories, refreshSubCategories]);
 
     // Hide category strip when collection area is out of view (e.g. scrolled to footer)
     useEffect(() => {
@@ -42,16 +46,9 @@ const Collection = () => {
     };
 
     // Derived state for active filters count
-    const activeFiltersCount = category.length + subCategory.length + (sortType !== 'relevant' ? 1 : 0);
+    const activeFiltersCount = subCategory.length + (sortType !== 'relevant' ? 1 : 0);
 
     const navigate = useNavigate();
-
-    const toggleCategory = (e) => {
-        const value = e.target.value;
-        setCategory(prev =>
-            prev.includes(value) ? prev.filter(i => i !== value) : [...prev, value]
-        );
-    };
 
     const toggleSubCategory = (e) => {
         const value = e.target.value;
@@ -68,78 +65,100 @@ const Collection = () => {
     };
 
     const clearAllFilters = () => {
-        setCategory([]);
         setSubCategory([]);
         setSortType('relevant');
         setSearch('');
         setShowSearch(false);
-        setIsLoading(true); // Force loading state to refresh grid
     };
 
-    const applyFilter = () => {
-        if (!Array.isArray(products)) {
-            setFilterProducts([]);
-            setIsLoading(false);
-            return;
+    const filterProducts = useMemo(() => {
+        if (!Array.isArray(products)) return [];
+
+        const normalizedSearch = search.trim().toLowerCase();
+        const filteredProducts = products.filter((item) => {
+            const matchesSearch = !showSearch || !normalizedSearch ||
+                (item?.name || '').toLowerCase().includes(normalizedSearch) ||
+                (item?.subCategory || '').toLowerCase().includes(normalizedSearch) ||
+                (item?.category || '').toLowerCase().includes(normalizedSearch);
+
+            const itemSub = (item?.subCategory || '').trim().toLowerCase();
+            const itemCat = (item?.category || '').trim().toLowerCase();
+            const matchesSubCategory = subCategory.length === 0 ||
+                subCategory.some(s => {
+                    const sNorm = s.trim().toLowerCase();
+                    return sNorm === itemSub || sNorm === itemCat;
+                });
+
+            return matchesSearch && matchesSubCategory;
+        });
+
+        return [...filteredProducts].sort((a, b) => {
+            if (sortType === 'low-high') return (a.price || 0) - (b.price || 0);
+            if (sortType === 'high-low') return (b.price || 0) - (a.price || 0);
+            if (sortType === 'newest') {
+                return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+            }
+            return 0;
+        });
+    }, [products, search, showSearch, subCategory, sortType]);
+
+    const isLoading = loading || !Array.isArray(products);
+
+    const availableTypes = useMemo(() => {
+        const seen = new Set();
+        const types = [];
+
+        // 1. First add subcategories from backend / ShopContext (Single Source of Truth)
+        if (Array.isArray(subCategories)) {
+            subCategories.forEach((subCategoryItem) => {
+                const name = typeof subCategoryItem === 'string'
+                    ? subCategoryItem.trim()
+                    : subCategoryItem?.name?.trim();
+                if (name) {
+                    const normalized = name.toLowerCase();
+                    if (!seen.has(normalized)) {
+                        seen.add(normalized);
+                        types.push(name);
+                    }
+                }
+            });
         }
 
-        let data = [...products];
-
-        if (showSearch && search) {
-            data = data.filter(item =>
-                (item?.name || '').toLowerCase().includes(search.toLowerCase()) ||
-                (item?.subCategory || '').toLowerCase().includes(search.toLowerCase())
-            );
+        // 2. Also dynamically include any subCategory or category that exists on current products
+        if (Array.isArray(products)) {
+            products.forEach((product) => {
+                const itemSub = product?.subCategory?.trim();
+                if (itemSub) {
+                    const normalized = itemSub.toLowerCase();
+                    if (!seen.has(normalized)) {
+                        seen.add(normalized);
+                        types.push(itemSub);
+                    }
+                }
+            });
         }
 
-        if (category.length > 0) {
-            data = data.filter(item => category.includes(item?.category));
-        }
+        return types;
+    }, [subCategories, products]);
 
-        if (subCategory.length > 0) {
-            data = data.filter(item => subCategory.includes(item?.subCategory));
-        }
-
-        if (sortType === 'low-high') {
-            data.sort((a, b) => (a.price || 0) - (b.price || 0));
-        } else if (sortType === 'high-low') {
-            data.sort((a, b) => (b.price || 0) - (a.price || 0));
-        } else if (sortType === 'newest') {
-            data.sort((a, b) => new Date(b.createdAt || Date.now()) - new Date(a.createdAt || Date.now()));
-        }
-
-        setFilterProducts(data);
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        setIsLoading(true);
-        applyFilter();
-    }, [products, search, showSearch, category, subCategory, sortType]);
-
-    // Removed useEffect for activeFiltersCount as it is now a derived state
-
-    const materials = ['Gold', 'Diamond', 'Silver'];
-    const defaultTypes = ['Rings', 'Necklace', 'Earrings'];
-    // Merge default types with fetched subcategories (names)
-    const availableTypes = Array.from(new Set([
-        ...defaultTypes,
-        ...(subCategories ? subCategories.map(sc => sc.name) : [])
-    ]));
-
-    // Emoji mapping for categories
-    const getCategoryEmoji = (type) => {
-        const emojiMap = {
-            'Rings': '💍',
-            'Necklace': '📿',
-            'Earrings': '✨',
-            'Bracelet': '⌚',
-            'Bracelets': '⌚',
-            'Pendant': '🔮',
-            'Pendants': '🔮',
-            'default': '💎'
-        };
-        return emojiMap[type] || emojiMap.default;
+    // Dynamic emoji mapping for food categories
+    const getCategoryEmoji = (type = '') => {
+        const normalized = type.toLowerCase();
+        if (normalized.includes('sweet') || normalized.includes('mithai')) return '🍬';
+        if (normalized.includes('cake') || normalized.includes('pastr')) return '🍰';
+        if (normalized.includes('burger') || normalized.includes('sandwich')) return '🍔';
+        if (normalized.includes('pizza')) return '🍕';
+        if (normalized.includes('momo') || normalized.includes('roll')) return '🥟';
+        if (normalized.includes('snack') || normalized.includes('chaat')) return '🍿';
+        if (normalized.includes('bakery') || normalized.includes('bread')) return '🥐';
+        if (normalized.includes('beverage') || normalized.includes('drink') || normalized.includes('shake') || normalized.includes('tea') || normalized.includes('coffee')) return '🥤';
+        if (normalized.includes('combo') || normalized.includes('offer')) return '🎁';
+        if (normalized.includes('chocolate')) return '🍫';
+        if (normalized.includes('donut')) return '🍩';
+        if (normalized.includes('cupcake')) return '🧁';
+        if (normalized.includes('cookie')) return '🍪';
+        if (normalized.includes('frie')) return '🍟';
+        return '🍽️';
     };
 
     return (
@@ -513,7 +532,7 @@ const Collection = () => {
                         letterSpacing: '-0.04em',
                         lineHeight: '1.1'
                     }}>
-                        Our Collections
+                        Our Menu
                     </h1>
 
                 </div>
@@ -526,7 +545,7 @@ const Collection = () => {
                     <input
                         type="text"
                         className="search-input-field"
-                        placeholder="Search our magnificent treasures..."
+                        placeholder="Search cakes, burgers, sweets & more..."
                         value={mobileSearchQuery}
                         onChange={(e) => setMobileSearchQuery(e.target.value)}
                         onKeyDown={handleMobileSearchKeyDown}
@@ -584,8 +603,8 @@ const Collection = () => {
                         className={`mobile-cat-item ${subCategory.length === 0 ? 'active' : ''}`}
                         style={{ border: 'none', cursor: 'pointer' }}
                     >
-                        <div style={{ fontSize: '20px' }}>✨</div>
-                        <span style={{ fontSize: '13px', fontWeight: '600' }}>All Treasures</span>
+                        <div style={{ fontSize: '20px' }}>🍽️</div>
+                        <span style={{ fontSize: '13px', fontWeight: '600' }}>All Items</span>
                     </button>
 
                     {availableTypes.map(type => {
@@ -736,46 +755,56 @@ const Collection = () => {
                                 background: 'linear-gradient(45deg, #b8860b, #d4a017)',
                                 borderRadius: '4px'
                             }} />
-                            Sub Categories
+                            Food Categories
                         </h3>
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '12px'
                         }}>
-                            {availableTypes.map(type => (
-                                <label key={type} style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    cursor: 'pointer',
-                                    fontSize: '15px',
-                                    color: '#4b5563',
-                                    padding: '6px 12px',
-                                    borderRadius: '12px',
-                                    transition: 'all 0.3s ease',
-                                    background: subCategory.includes(type) ? 'rgba(184, 134, 11, 0.05)' : 'transparent'
-                                }}>
-                                    <input
-                                        type="checkbox"
-                                        value={type}
-                                        checked={subCategory.includes(type)}
-                                        onChange={toggleSubCategory}
-                                        style={{
-                                            width: '18px',
-                                            height: '18px',
-                                            accentColor: '#b8860b',
-                                            cursor: 'pointer',
-                                            borderRadius: '4px'
-                                        }}
-                                    />
-                                    <span style={{
-                                        fontWeight: subCategory.includes(type) ? '600' : '400'
+                            {isLoading ? (
+                                <div style={{ color: '#6b7280', fontSize: '14px', padding: '6px 12px', fontStyle: 'italic' }}>
+                                    Loading categories...
+                                </div>
+                            ) : availableTypes.length === 0 ? (
+                                <div style={{ color: '#6b7280', fontSize: '14px', padding: '6px 12px', fontStyle: 'italic' }}>
+                                    No categories available
+                                </div>
+                            ) : (
+                                availableTypes.map(type => (
+                                    <label key={type} style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '12px',
+                                        cursor: 'pointer',
+                                        fontSize: '15px',
+                                        color: '#4b5563',
+                                        padding: '6px 12px',
+                                        borderRadius: '12px',
+                                        transition: 'all 0.3s ease',
+                                        background: subCategory.includes(type) ? 'rgba(184, 134, 11, 0.05)' : 'transparent'
                                     }}>
-                                        {type}
-                                    </span>
-                                </label>
-                            ))}
+                                        <input
+                                            type="checkbox"
+                                            value={type}
+                                            checked={subCategory.includes(type)}
+                                            onChange={toggleSubCategory}
+                                            style={{
+                                                width: '18px',
+                                                height: '18px',
+                                                accentColor: '#b8860b',
+                                                cursor: 'pointer',
+                                                borderRadius: '4px'
+                                            }}
+                                        />
+                                        <span style={{
+                                            fontWeight: subCategory.includes(type) ? '600' : '400'
+                                        }}>
+                                            {type}
+                                        </span>
+                                    </label>
+                                ))
+                            )}
                         </div>
 
                         {/* Sort functionality integrated within sidebar for mobile consistency */}
@@ -792,7 +821,7 @@ const Collection = () => {
                                 letterSpacing: '1px'
                             }}>
                                 <ChevronDown size={16} />
-                                Arrange By
+                                Sort By
                             </h3>
                             <div style={{ position: 'relative' }}>
                                 <select
@@ -913,7 +942,7 @@ const Collection = () => {
                             }}>
                                 {filterProducts.length}
                             </span>
-                            exquisite {filterProducts.length === 1 ? 'piece' : 'pieces'} found
+                            delicious {filterProducts.length === 1 ? 'item' : 'items'} found
                             {search && showSearch && (
                                 <span style={{
                                     fontWeight: '600',
@@ -1016,7 +1045,7 @@ const Collection = () => {
                                     to { transform: rotate(360deg); }
                                 }
                             `}</style>
-                            Discovering jewelry masterpieces...
+                            Preparing delicious treats...
                         </div>
                     ) : filterProducts.length > 0 ? (
                         <div
@@ -1077,7 +1106,7 @@ const Collection = () => {
                                 WebkitTextFillColor: 'transparent',
                                 marginBottom: '16px'
                             }}>
-                                No products found
+                                No items found
                             </h3>
                             <p style={{
                                 fontSize: '16px',
@@ -1088,8 +1117,8 @@ const Collection = () => {
                                 marginRight: 'auto',
                                 lineHeight: '1.8'
                             }}>
-                                We couldn't find any pieces matching your criteria.
-                                Try adjusting your filters or explore our complete collection.
+                                We couldn't find any items matching your criteria.
+                                Try adjusting your filters or explore our complete menu.
                             </p>
                             <button
                                 onClick={clearAllFilters}
@@ -1117,7 +1146,7 @@ const Collection = () => {
                                     e.currentTarget.style.boxShadow = '0 10px 25px rgba(184, 134, 11, 0.3)';
                                 }}
                             >
-                                Explore All Collections
+                                Explore Full Menu
                             </button>
                         </div>
                     )}
@@ -1184,7 +1213,7 @@ const Collection = () => {
                         marginRight: 'auto',
                         lineHeight: '1.8'
                     }}>
-                        Our jewelry experts are here to guide you.
+                        Our food experts are here to guide you.
                         Book a free personalized consultation today.
                     </p>
                     <button

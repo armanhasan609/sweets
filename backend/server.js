@@ -77,7 +77,7 @@ const server = http.createServer(app);
 // 6. Socket.IO Setup
 const io = new Server(server, {
     cors: {
-        origin: ["https://jewelnest.co", "http://localhost:5173"],
+        origin: [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:5174'].filter(Boolean),
         methods: ["GET", "POST"],
         credentials: true
     }

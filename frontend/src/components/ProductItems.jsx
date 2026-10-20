@@ -612,7 +612,7 @@ const ProductItem = ({ id, image, images, name, price, originalPrice, salePrice,
                             textTransform: 'uppercase',
                             marginBottom: '8px'
                         }}>
-                            JewelNest Collection
+                            FoodNest Menu
                         </div>
 
                         {/* Product Name */}

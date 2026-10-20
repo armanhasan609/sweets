@@ -9,7 +9,8 @@ exports.addProduct = async (req, res) => {
     try {
         const {
             name, description, price, originalPrice, salePrice,
-            stock, subCategory, bestseller,
+            stock, subCategory, category, bestseller, ingredients, dietary,
+            portions, preparationTime, isAvailable,
             onSale, saleStartDate, saleEndDate,
             hasVariants, variants: variantsStr
         } = req.body;
@@ -30,6 +31,12 @@ exports.addProduct = async (req, res) => {
             salePrice: parseBoolean(onSale) ? Number(salePrice) : null,
             stock: Number(stock) || 0,
             subCategory,
+            category: category || subCategory,
+            ingredients,
+            dietary: dietary || '',
+            portions: Array.isArray(portions) ? portions : (portions ? String(portions).split(',').map(item => item.trim()).filter(Boolean) : []),
+            preparationTime: preparationTime ? Number(preparationTime) : undefined,
+            isAvailable: isAvailable === undefined ? true : parseBoolean(isAvailable),
             bestseller: parseBoolean(bestseller),
             onSale: parseBoolean(onSale),
             saleStartDate: parseBoolean(onSale) ? saleStartDate : null,
@@ -189,7 +196,7 @@ exports.singleProduct = async (req, res) => {
 // 5. UPDATE PRODUCT
 exports.updateProduct = async (req, res) => {
     try {
-        const { id, name, description, price, originalPrice, salePrice, stock, subCategory, bestseller, onSale, saleStartDate, saleEndDate, existingImages: existingImagesStr, hasVariants, variants: variantsStr, existingVariants: existingVariantsStr } = req.body;
+        const { id, name, description, price, originalPrice, salePrice, stock, subCategory, category, bestseller, ingredients, dietary, portions, preparationTime, isAvailable, onSale, saleStartDate, saleEndDate, existingImages: existingImagesStr, hasVariants, variants: variantsStr, existingVariants: existingVariantsStr } = req.body;
 
         const product = await Product.findById(id);
         if (!product) {
@@ -205,6 +212,12 @@ exports.updateProduct = async (req, res) => {
             price: Number(price),
             stock: Number(stock),
             subCategory,
+            category: category || subCategory,
+            ingredients,
+            dietary: dietary || '',
+            portions: Array.isArray(portions) ? portions : (portions ? String(portions).split(',').map(item => item.trim()).filter(Boolean) : []),
+            preparationTime: preparationTime ? Number(preparationTime) : undefined,
+            isAvailable: isAvailable === undefined ? product.isAvailable : parseBoolean(isAvailable),
             bestseller: parseBoolean(bestseller),
             onSale: parseBoolean(onSale),
             salePrice: parseBoolean(onSale) ? Number(salePrice) : null,

@@ -212,7 +212,7 @@ const ChatWidget = () => {
                                     fontSize: '15px',
                                     fontWeight: '700',
                                     letterSpacing: '0.3px'
-                                }}>JewelNest Support</div>
+                                }}>FoodNest Support</div>
                                 <div style={{
                                     color: isConnected ? '#4ade80' : '#94a3b8',
                                     fontSize: '11px',

@@ -284,7 +284,7 @@ const Orders = () => {
                         <img src="${qrCodeUrl}" alt="Delivery QR" />
                         <div style="font-size: 8px;">Driver Scan</div>
                     </div>
-                    <h1>JewelNest Invoice</h1>
+                    <h1>FoodNest Invoice</h1>
                     <h3>Order #${order._id.slice(-8)}</h3>
                     <p>Date: ${order.formattedDate}</p>
                     <div class="status-badge status-${order.status.toLowerCase().replace(' ', '-')}">
@@ -295,10 +295,10 @@ const Orders = () => {
                 <div style="display: flex; gap: 10px; font-size: 10px;">
                     <div class="section" style="flex: 1;">
                         <div class="section-title">Sold By</div>
-                        <p><strong>JewelNest</strong></p>
-                        <p>JewelNest, Banipur, Murshidabad<br />
+                        <p><strong>FoodNest</strong></p>
+                        <p>FoodNest, Banipur, Murshidabad<br />
                                             West Bengal, India - 742235</p>
-                        <p>jewelnest86@gmail.com</p>
+                        <p>support@foodnest.com</p>
                     </div>
                     <div class="section" style="flex: 1;">
                         <div class="section-title">Bill To</div>

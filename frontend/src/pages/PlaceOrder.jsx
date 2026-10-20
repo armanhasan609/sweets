@@ -329,7 +329,7 @@ const PlaceOrder = () => {
                     key: keyId,
                     amount: rpOrder.amount,
                     currency: rpOrder.currency,
-                    name: 'JewelNest',
+                    name: 'FoodNest',
                     description: 'Order Payment',
                     order_id: rpOrder.id,
                     handler: async (response) => {

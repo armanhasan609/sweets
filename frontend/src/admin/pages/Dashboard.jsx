@@ -26,7 +26,7 @@ const Dashboard = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Are you sure you want to delete this jewelry item?")) {
+        if (window.confirm("Are you sure you want to delete this food item?")) {
             try {
                 await axios.post(`${backendUrl}/api/products/remove`, { id });
                 fetchProducts();
@@ -205,7 +205,7 @@ const Dashboard = () => {
             <div style={headerStyle} className="header-container">
                 <div style={headerInnerStyle}>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                        <h1 style={titleStyle}>Jewelry Inventory</h1>
+                        <h1 style={titleStyle}>Food Inventory</h1>
                         <p style={{
                             fontSize: 'clamp(13px, 1.5vw, 14px)',
                             color: '#6b7280',
@@ -213,7 +213,7 @@ const Dashboard = () => {
                             maxWidth: '600px',
                             lineHeight: '1.5'
                         }}>
-                            Manage your jewelry collection, track inventory, and update product details
+                            Manage sweets, meals and drinks, track inventory, and update product details
                         </p>
                     </div>
                     <div style={badgeStyle} className="badge-container">
@@ -310,7 +310,7 @@ const Dashboard = () => {
                         color: '#6b7280',
                         maxWidth: '400px'
                     }}>
-                        Fetching your jewelry products from the database
+                        Fetching your food products from the database
                     </p>
                 </div>
             )}
@@ -426,7 +426,7 @@ const Dashboard = () => {
                                 marginBottom: '24px',
                                 lineHeight: '1.5'
                             }}>
-                                Your inventory is empty. Add your first jewelry product to get started.
+                                Your inventory is empty. Add your first food product to get started.
                             </p>
                             <button
                                 onClick={() => window.location.href = '/admin/add-product'}

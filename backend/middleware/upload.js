@@ -38,7 +38,7 @@ const uploadToS3 = async (file) => {
         .webp({ quality: 85, effort: 4 })
         .toBuffer();
 
-    const key = `JewelNest_Products/${Date.now()}-${file.originalname.replace(/\s+/g, '_').replace(/\.[^/.]+$/, '')}.webp`;
+    const key = `FoodNest_Products/${Date.now()}-${file.originalname.replace(/\s+/g, '_').replace(/\.[^/.]+$/, '')}.webp`;
 
     const s3Upload = new Upload({
         client: s3,

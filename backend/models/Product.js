@@ -23,6 +23,16 @@ const ProductSchema = new mongoose.Schema({
     sku: { type: String, unique: true, trim: true },
     name: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
+    ingredients: { type: String, trim: true },
+    dietary: {
+        type: String,
+        enum: ['vegetarian', 'non-vegetarian', 'vegan', 'eggless', ''],
+        default: ''
+    },
+    portions: [{ type: String, trim: true }],
+    preparationTime: { type: Number, min: 0 },
+    isAvailable: { type: Boolean, default: true },
+    category: { type: String, trim: true },
 
     // --- PRICE SECTION ---
     price: { type: Number, required: true },         // Normal Selling Price (e.g., 1500)
@@ -56,6 +66,9 @@ const ProductSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+ProductSchema.index({ name: 'text', description: 'text', ingredients: 'text', subCategory: 'text' });
+ProductSchema.index({ subCategory: 1, isAvailable: 1 });
 
 // Virtual: total stock across all variants (or fallback to stock field)
 ProductSchema.virtual('totalVariantStock').get(function () {

@@ -535,7 +535,7 @@ const Product = () => {
                                 color: '#6b7280',
                                 lineHeight: '1.8'
                             }}>
-                                {productData.description || "This exquisitely crafted jewelry piece embodies timeless elegance and sophistication."}
+                                {productData.description || "Freshly prepared with quality ingredients and made for sharing."}
                             </p>
                         </div>
 
@@ -1053,7 +1053,7 @@ const Product = () => {
                                         color: '#1a202c',
                                         margin: 0
                                     }}>
-                                        {productData.subCategory || 'Necklace'}
+                                        {productData.subCategory || 'Food item'}
                                     </p>
                                 </div>
                             </div>

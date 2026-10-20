@@ -187,7 +187,7 @@ const Cart = () => {
                     opacity: '0.9',
                     marginBottom: '30px',
                     maxWidth: '500px'
-                }}>Add some sparkling jewelry to light it up!</p>
+                }}>Add something delicious to your cart!</p>
                 <Link
                     to="/collection"
                     style={{
@@ -212,7 +212,7 @@ const Cart = () => {
                         e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
                     }}
                 >
-                    Explore Jewelry Collection
+                    Explore Food Menu
                 </Link>
                 <style>{`
                     @keyframes bounce {

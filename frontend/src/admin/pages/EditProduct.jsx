@@ -1,13 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../../services/api'; // Ensure API is imported if used
+import { ShopContext } from '../../context/ShopContext';
 import { Package, Percent, Calendar, UploadCloud, ArrowLeft, Save, Tag, DollarSign, Layers, X, Image as ImageIcon, Plus, Check, Trash2, ChevronDown } from 'lucide-react';
 
 const EditProduct = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { subCategories: contextSubCategories, refreshSubCategories } = useContext(ShopContext);
 
     const [images, setImages] = useState([]);
     const [existingImages, setExistingImages] = useState([]);
@@ -17,8 +19,11 @@ const EditProduct = () => {
     const [price, setPrice] = useState("");
     const [salePrice, setSalePrice] = useState("");
     const [stock, setStock] = useState("");
-    const [subCategory, setSubCategory] = useState("Rings");
-    const [subCategoryOptions, setSubCategoryOptions] = useState(["Rings", "Necklace", "Earrings", "Bangles"]);
+    const [subCategory, setSubCategory] = useState("Sweets & Mithai");
+    const [subCategoryOptions, setSubCategoryOptions] = useState([
+        "Sweets & Mithai", "Cakes & Pastries", "Burgers & Sandwiches", "Pizza",
+        "Momos & Rolls", "Snacks & Chaat", "Bakery Items", "Beverages", "Combos & Special Offers"
+    ]);
     const [isAddingSubCategory, setIsAddingSubCategory] = useState(false);
     const [newSubCategory, setNewSubCategory] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -37,19 +42,31 @@ const EditProduct = () => {
     // Each variant: { color: '', existingImages: [{url, publicId}], newImages: [], compressedImages: [], sizes: [{ size: '', stock: 0, priceAdjustment: 0 }] }
     const [variants, setVariants] = useState([]);
 
+    // Sync from ShopContext
+    useEffect(() => {
+        if (Array.isArray(contextSubCategories) && contextSubCategories.length > 0) {
+            const dbNames = contextSubCategories
+                .map(sc => (typeof sc === 'string' ? sc : sc.name)?.trim())
+                .filter(Boolean);
+            if (dbNames.length > 0) {
+                setSubCategoryOptions(dbNames);
+            }
+        }
+    }, [contextSubCategories]);
+
     // Fetch SubCategories on Mount
     useEffect(() => {
         const fetchSubCategories = async () => {
             try {
-                // Using axios directly or API instance depending on preference, sticking to existing style mostly
                 const backendUrl = import.meta.env.VITE_BACKEND_URL;
                 const response = await axios.get(`${backendUrl}/api/subcategories/all`);
-                if (response.data.success) {
-                    const dbSubCategories = response.data.subCategories.map(sc => sc.name);
-                    setSubCategoryOptions(prev => {
-                        const unique = new Set([...prev, ...dbSubCategories]);
-                        return Array.from(unique);
-                    });
+                if (response.data.success && Array.isArray(response.data.subCategories)) {
+                    const dbSubCategories = response.data.subCategories
+                        .map(sc => (typeof sc === 'string' ? sc : sc.name)?.trim())
+                        .filter(Boolean);
+                    if (dbSubCategories.length > 0) {
+                        setSubCategoryOptions(dbSubCategories);
+                    }
                 }
             } catch (error) {
                 console.error("Failed to fetch subcategories", error);
@@ -352,7 +369,7 @@ const EditProduct = () => {
             return toast.error("Please enter a sub category name");
         }
         const trimmedName = newSubCategory.trim();
-        if (subCategoryOptions.includes(trimmedName)) {
+        if (subCategoryOptions.some(opt => opt.toLowerCase() === trimmedName.toLowerCase())) {
             return toast.error("Sub Category already exists!");
         }
 
@@ -360,7 +377,17 @@ const EditProduct = () => {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
             const response = await axios.post(`${backendUrl}/api/subcategories/add`, { name: trimmedName });
             if (response.data.success) {
-                setSubCategoryOptions([...subCategoryOptions, trimmedName]);
+                if (refreshSubCategories) {
+                    try {
+                        await refreshSubCategories();
+                    } catch (refreshErr) {
+                        console.error("Subcategory refresh error:", refreshErr);
+                    }
+                }
+                setSubCategoryOptions(prev => {
+                    if (prev.some(o => o.toLowerCase() === trimmedName.toLowerCase())) return prev;
+                    return [...prev, trimmedName];
+                });
                 setSubCategory(trimmedName);
                 setNewSubCategory("");
                 setIsAddingSubCategory(false);
@@ -370,7 +397,7 @@ const EditProduct = () => {
             }
         } catch (error) {
             console.error("Error adding subcategory:", error);
-            toast.error("Failed to save sub category to database");
+            toast.error(error.response?.data?.message || "Failed to save sub category to database");
         }
     };
 
@@ -383,24 +410,36 @@ const EditProduct = () => {
                 const response = await axios.post(`${backendUrl}/api/subcategories/delete`, { name: categoryToDelete });
                 if (response.data.success) {
                     toast.success("Sub Category deleted!");
-                    const newOptions = subCategoryOptions.filter(opt => opt !== categoryToDelete);
+                    if (refreshSubCategories) {
+                        try {
+                            await refreshSubCategories();
+                        } catch (refreshErr) {
+                            console.error("Refresh failed:", refreshErr);
+                        }
+                    }
+                    const newOptions = subCategoryOptions.filter(opt => opt.toLowerCase() !== categoryToDelete.toLowerCase());
                     setSubCategoryOptions(newOptions);
-                    if (subCategory === categoryToDelete) {
+                    if (subCategory.toLowerCase() === categoryToDelete.toLowerCase()) {
                         setSubCategory(newOptions.length > 0 ? newOptions[0] : "");
                     }
                 }
             } catch (error) {
                 // If 404 (not in DB), remove from frontend anyway
                 if (error.response && error.response.status === 404) {
-                    const newOptions = subCategoryOptions.filter(opt => opt !== categoryToDelete);
+                    const newOptions = subCategoryOptions.filter(opt => opt.toLowerCase() !== categoryToDelete.toLowerCase());
                     setSubCategoryOptions(newOptions);
-                    if (subCategory === categoryToDelete) {
+                    if (subCategory.toLowerCase() === categoryToDelete.toLowerCase()) {
                         setSubCategory(newOptions.length > 0 ? newOptions[0] : "");
+                    }
+                    if (refreshSubCategories) {
+                        try {
+                            await refreshSubCategories();
+                        } catch (e) {}
                     }
                     toast.info("Removed from list (was not in database)");
                 } else {
                     console.error("Error deleting subcategory:", error);
-                    toast.error("Failed to delete sub category");
+                    toast.error(error.response?.data?.message || "Failed to delete sub category");
                 }
             }
         }

@@ -22,7 +22,7 @@ const ForgotPassword = () => {
 
     // Page Title Management
     useEffect(() => {
-        document.title = step === 1 ? "Forgot Password | JewelNest" : "Reset Your Password | JewelNest";
+        document.title = step === 1 ? "Forgot Password | FoodNest" : "Reset Your Password | FoodNest";
     }, [step]);
 
     // Mount effect for initial animation
@@ -319,7 +319,7 @@ const ForgotPassword = () => {
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent'
                             }}>
-                                JewelNest
+                                FoodNest
                             </span>
                         </div>
 

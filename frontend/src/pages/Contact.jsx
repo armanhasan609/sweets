@@ -155,7 +155,7 @@ const Contact = () => {
                                             color: '#6b7280',
                                             lineHeight: '1.5'
                                         }}>
-                                            JewelNest, Banipur, Murshidabad<br />
+                                            FoodNest, Banipur, Murshidabad<br />
                                             West Bengal, India - 742235
                                         </p>
                                     </div>
@@ -252,7 +252,7 @@ const Contact = () => {
                                             fontSize: '14px',
                                             color: '#6b7280'
                                         }}>
-                                            jewelnest86@gmail.com
+                                            support@foodnest.com
                                         </p>
                                     </div>
                                 </div>

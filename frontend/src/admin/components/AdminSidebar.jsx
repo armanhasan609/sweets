@@ -93,7 +93,7 @@ const AdminSidebar = () => {
     const storedUser = localStorage.getItem('user');
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     const adminName = parsedUser?.name || localStorage.getItem('adminName') || 'Admin';
-    const adminEmail = parsedUser?.email || localStorage.getItem('adminEmail') || 'admin@jewelnest.com';
+    const adminEmail = parsedUser?.email || localStorage.getItem('adminEmail') || 'admin@foodnest.com';
     const isSuperAdmin = localStorage.getItem('isSuperAdmin') === 'true';
 
     // Responsive sidebar width
@@ -413,7 +413,7 @@ const AdminSidebar = () => {
                             minWidth: 0
                         }}>
                             <h2 style={logoTitleStyle}>
-                                {isMobile ? 'JewelNest' : (sidebarCollapsed ? 'JN' : 'JewelNest')}
+                                {isMobile ? 'FoodNest' : (sidebarCollapsed ? 'FN' : 'FoodNest')}
                             </h2>
                             <p style={logoSubtitleStyle}>ADMIN PANEL</p>
                         </div>

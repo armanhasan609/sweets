@@ -39,19 +39,30 @@ const ShopContextProvider = ({ children }) => {
     const [subCategories, setSubCategories] = useState([]);
 
     // ---------------- PRODUCTS & SUBCATEGORIES ----------------
+    const refreshSubCategories = useCallback(async () => {
+        try {
+            const response = await axios.get(`${backendUrl}/api/subcategories/all`);
+            if (response.data?.success && Array.isArray(response.data.subCategories)) {
+                setSubCategories(response.data.subCategories);
+                return response.data.subCategories;
+            }
+            return [];
+        } catch (error) {
+            console.error("Failed to load subcategories:", error);
+            return [];
+        }
+    }, [backendUrl]);
+
     const getProductsData = useCallback(async () => {
         setLoading(true);
         try {
-            const [productsRes, subCatRes] = await Promise.all([
+            const [productsRes] = await Promise.allSettled([
                 axios.get(`${backendUrl}/api/products/all`),
-                axios.get(`${backendUrl}/api/subcategories/all`)
+                refreshSubCategories()
             ]);
 
-            if (productsRes.data?.products) {
-                setProducts(productsRes.data.products);
-            }
-            if (subCatRes.data?.success) {
-                setSubCategories(subCatRes.data.subCategories);
+            if (productsRes.status === 'fulfilled' && productsRes.value?.data?.products) {
+                setProducts(productsRes.value.data.products);
             }
         } catch (err) {
             console.error("Failed to load initial data", err);
@@ -59,7 +70,7 @@ const ShopContextProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [backendUrl, refreshSubCategories]);
 
     useEffect(() => {
         getProductsData();
@@ -356,6 +367,7 @@ const ShopContextProvider = ({ children }) => {
         showSearch,
         setShowSearch,
         subCategories,
+        refreshSubCategories,
     };
 
     return (

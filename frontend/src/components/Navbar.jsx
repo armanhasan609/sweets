@@ -427,7 +427,7 @@ const Navbar = () => {
                         <input
                             ref={searchInputRef}
                             type="text"
-                            placeholder="Search jewelry..."
+                            placeholder="Search sweets, meals and drinks..."
                             style={{
                                 background: "transparent",
                                 border: "none",
@@ -685,7 +685,7 @@ const Navbar = () => {
                 }}>
                     <input
                         type="text"
-                        placeholder="Search jewelry..."
+                        placeholder="Search sweets, meals and drinks..."
                         style={{
                             background: "transparent",
                             border: "none",
@@ -754,7 +754,7 @@ const Navbar = () => {
                         }}
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
-                        💎 Collections
+                        🍽️ Food Menu
                     </Link>
 
                     <Link

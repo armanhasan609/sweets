@@ -186,8 +186,8 @@ const Login = () => {
                         margin: 0
                     }}>
                         {currentState === "Login"
-                            ? "Sign in to continue your jewelry journey"
-                            : "Join JewelNest for premium collections"}
+                            ? "Sign in for fresh sweets, meals and treats"
+                            : "Join FoodNest for delicious food delivered fast"}
                     </p>
                 </div>
 

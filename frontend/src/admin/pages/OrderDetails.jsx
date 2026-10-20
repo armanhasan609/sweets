@@ -155,7 +155,7 @@ const OrderDetails = () => {
         </head>
         <body>
           <div class="header">
-            <h1>JewelNest Invoice</h1>
+            <h1>FoodNest Invoice</h1>
             <h3>Order #${order?._id}</h3>
           </div>
           <div class="section">

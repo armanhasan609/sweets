@@ -46,12 +46,12 @@ const Footer = () => {
     ];
 
     const categories = [
-        { name: 'Necklaces', count: '48+' },
-        { name: 'Rings', count: '36+' },
-        { name: 'Earrings', count: '42+' },
-        { name: 'Bracelets', count: '24+' },
-        { name: 'Anklets', count: '18+' },
-        { name: 'Pendants', count: '30+' }
+        { name: 'Sweets & Mithai', count: '48+' },
+        { name: 'Cakes & Pastries', count: '36+' },
+        { name: 'Burgers & Sandwiches', count: '42+' },
+        { name: 'Pizza', count: '24+' },
+        { name: 'Snacks & Chaat', count: '18+' },
+        { name: 'Beverages', count: '30+' }
     ];
 
     const customerService = [
@@ -72,9 +72,9 @@ const Footer = () => {
     ];
 
     const contactInfo = [
-        { Icon: MapPin, text: 'JewelNest, Banipur, Murshidabad, West Bengal - 742235', color: '#8b5cf6' },
+        { Icon: MapPin, text: 'FoodNest, Banipur, Murshidabad, West Bengal - 742235', color: '#8b5cf6' },
         { Icon: Phone, text: '+91 86090 30343 (Mon-Sun, 10AM-8PM)', color: '#3b82f6' },
-        { Icon: Mail, text: 'jewelnest86@gmail.com', color: '#ec4899' },
+        { Icon: Mail, text: 'support@foodnest.com', color: '#ec4899' },
         { Icon: Clock, text: 'Customer Support: 24/7', color: '#10b981' }
     ];
 
@@ -137,7 +137,7 @@ const Footer = () => {
                             fontFamily: "'Playfair Display', serif",
                             lineHeight: '1.2'
                         }}>
-                            Exclusive Experience,<br />Uncompromised Quality
+                            Fresh Flavours,<br />Made With Care
                         </h2>
                         <p style={{
                             fontSize: '16px',
@@ -145,7 +145,7 @@ const Footer = () => {
                             lineHeight: '1.7',
                             maxWidth: '500px'
                         }}>
-                            We are committed to providing exceptional craftsmanship, ethical sourcing, and unparalleled customer service.
+                            Fresh ingredients, generous portions and dependable delivery for every order.
                         </p>
                     </div>
 
@@ -309,7 +309,7 @@ const Footer = () => {
                                 WebkitTextFillColor: 'transparent',
                                 fontFamily: "'Playfair Display', serif"
                             }}>
-                                JewelNest
+                                FoodNest
                             </h2>
                         </div>
 
@@ -320,7 +320,7 @@ const Footer = () => {
                             marginBottom: '32px',
                             maxWidth: '300px'
                         }}>
-                            Crafting timeless elegance with ethically sourced, high-quality jewelry that tells your unique story.
+                            Serving sweets, bakery favourites and fast food made fresh for your family.
                         </p>
 
                         <div style={{ display: 'flex', gap: '16px', marginBottom: '32px' }}>
@@ -536,7 +536,7 @@ const Footer = () => {
                                 fontSize: '14px',
                                 color: '#6b7280'
                             }}>
-                                © {currentYear} JewelNest. All rights reserved.
+                                © {currentYear} FoodNest. All rights reserved.
                             </span>
                             <div style={{
                                 width: '4px',

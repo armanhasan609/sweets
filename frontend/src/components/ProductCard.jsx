@@ -582,7 +582,7 @@ const ProductCard = ({ product }) => {
                     textTransform: 'uppercase',
                     margin: '0 0 8px 0'
                 }}>
-                    JewelNest Collection
+                    FoodNest Favourite
                 </h3>
 
                 {/* Product Name */}

@@ -454,13 +454,13 @@ const sendOrderConfirmationEmail = async (email, order) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: `Order Confirmation #${order._id.toString().slice(-6)} - JewelNest`,
+            subject: `Order Confirmation #${order._id.toString().slice(-6)} - FoodNest`,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; background: #f9f9f9; padding: 30px;">
                     <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                         <div style="text-align: center; margin-bottom: 30px;">
                             <h1 style="color: #b8860b; margin: 0;">Order Confirmed! 🎉</h1>
-                            <p style="color: #666; margin-top: 10px;">Thank you for shopping with JewelNest</p>
+                            <p style="color: #666; margin-top: 10px;">Thank you for ordering with FoodNest</p>
                         </div>
                         
                         <div style="background: #f8f5f0; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
@@ -504,7 +504,7 @@ const sendOrderConfirmationEmail = async (email, order) => {
                         
                         <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee; text-align: center;">
                             <p style="color: #999; font-size: 14px;">
-                                Track your order in your account or contact us at support@jewelnest.com
+                                Track your order in your account or contact us at support@foodnest.com
                             </p>
                         </div>
                     </div>
@@ -706,7 +706,7 @@ const sendOTP = async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Your Delivery OTP - JewelNest',
+            subject: 'Your Delivery OTP - FoodNest',
             html: `
                 <div style="font-family: Arial; max-width: 600px; margin: 0 auto;">
                     <h2 style="color: #b8860b;">Delivery OTP</h2>
@@ -717,7 +717,7 @@ const sendOTP = async (req, res) => {
                         <p style="color: #6b7280; margin: 10px 0 0 0;">Valid until delivery</p>
                     </div>
                     <p style="color: #6b7280; font-size: 14px;">Order ID: ${orderId}</p>
-                    <p style="color: #9ca3af; font-size: 12px;">JewelNest - Premium Jewelry Store</p>
+                    <p style="color: #9ca3af; font-size: 12px;">FoodNest - Sweets & Fast Food</p>
                 </div>
             `
         };

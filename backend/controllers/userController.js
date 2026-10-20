@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 // Super Admin Config - Centralized configuration
 const SUPER_ADMIN_ID = process.env.SUPER_ADMIN_ID || "5f8d04b3fc13ae0000000000";
-const SUPER_ADMIN_EMAIL = process.env.ADMIN_EMAIL || "superadmin@jewelnest.com";
+const SUPER_ADMIN_EMAIL = process.env.ADMIN_EMAIL || "superadmin@foodnest.com";
 const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // --- HELPERS ---
@@ -938,7 +938,7 @@ const sendResetOtp = async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'JewelNest - Password Reset OTP',
+            subject: 'FoodNest - Password Reset OTP',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <h2 style="color: #333;">Password Reset Request</h2>
@@ -950,7 +950,7 @@ const sendResetOtp = async (req, res) => {
                     <p>This OTP is valid for 15 minutes.</p>
                     <p>If you didn't request this, please ignore this email.</p>
                     <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="color: #777; font-size: 12px;">JewelNest Team</p>
+                    <p style="color: #777; font-size: 12px;">FoodNest Team</p>
                 </div>
             `
         };

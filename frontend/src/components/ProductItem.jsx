@@ -185,7 +185,7 @@ const ProductItem = ({
 
 
 
-    // Sizes for jewelry
+    // Sizes are also used for food portions.
     const sizes = [
         { id: 's', label: 'Small', available: true },
         { id: 'm', label: 'Medium', available: true },
@@ -290,7 +290,7 @@ const ProductItem = ({
                     {/* Product Image */}
                     <img
                         src={mainImageSrc}
-                        alt={name || 'Luxury Jewelry'}
+                        alt={name || 'FoodNest food product'}
                         onLoad={handleImageLoad}
                         onError={handleImageError}
                         loading="lazy"
